@@ -1,0 +1,101 @@
+metadata:
+  title: Nested loop
+  documentation: "https://docassemble.org/docs/groups.html"
+  example start: 1
+  example end: 13
+---
+objects:
+  - employeur: |
+      DAList.using(
+        object_type=Individual,
+        minimum_number=1,
+        complete_attribute='complete')
+  - employeur[i].classe: |
+      DAList.using(
+        object_type=Individual,
+        complete_attribute='complete')
+---
+code: |
+  employeur[i].name.first
+
+  employeur[i].protection.gather()
+  employeur[i].classe.gather()
+  employeur[i].complete = True
+---
+code: |
+  employeur[i].classe[j].name.first
+ 
+  employeur[i].classe[j].protection.gather()
+  employeur[i].classe[j].complete = True
+---
+question: |
+  What is the name of the
+  ${ ordinal(i) }
+  employeur?
+fields:
+  - First: employeur[i].name.first
+ 
+---
+question: |
+  Is there another employeur?
+yesno: employeur.there_is_another
+---
+question: |
+  Does ${ employeur[i] } have any classes?
+yesno: employeur[i].classe.there_are_any
+---
+question: |
+  Quel est le nom de 
+  ${ employeur[i].possessive(ordinal(j) + ' classe') }?
+fields:
+  - First: employeur[i].classe[j].name.first
+
+---
+question: |
+  Est-ce que ${ employeur[i] } a d'autres classe que
+   ${ employeur[i].classe }?
+yesno: employeur[i].classe.there_is_another
+---
+generic object: Individual
+objects:
+  - x.protection: DAList
+---
+generic object: Individual
+question: |
+  Does ${ x } have any protection?
+yesno: x.protection.there_are_any
+---
+generic object: Individual
+question: |
+  What protection does ${ x } have?
+fields:
+  - Type (Ind, Fam.): x.protection[i]
+ 
+---
+generic object: Individual
+question: |
+  Does ${ x } have any protection
+  other than ${ x.protection }?
+yesno: x.protection.there_is_another
+---
+mandatory: True
+question: |
+  Information retrieved
+subquestion: |
+  You told me about
+  ${ employeur.quantity_noun('individual') },
+  ses protections, ses classes,
+  et les protections de ses classes.
+  % for e in employeur:
+  You told me about ${ e }.
+    % if e.protection.number() > 0:
+  ${ e } is protection to ${ e.protection }.
+    % endif
+    % for c in e.classe:
+  ${ e } has a classe named ${ c }.
+    % if c.protection.number() > 0:
+  ${ c } is protection to ${ c.protection }.
+    % endif
+    % endfor
+ 
+  % endfor
