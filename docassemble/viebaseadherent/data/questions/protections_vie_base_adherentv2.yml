@@ -36,6 +36,7 @@ fields:
 
   - "Exonération des primes?": vie_base_adherent.exo_prime
     datatype: yesnoradio
+    default: True
     
   - "Delais exo": vie_base_adherent.delai
   
@@ -45,8 +46,17 @@ fields:
       - 3 mois
       - 6 mois
 
+  - "Paiement anticipé si maladie terminale": vie_base_adherent.maladie_terminale_paiement
+    datatype: yesnoradio
+    default: False
+
+  - "Montant": vie_base_adherent.maladie_terminale_montant
+    show if: vie_base_adherent.maladie_terminale_paiement
+  
+
   - "Protection d'assistance juridique": vie_base_adherent.assistance_juridique
-    datatype: yesnoradio 
+    datatype: yesnoradio
+    default: False
 ---
 question: Quels types de protections sont détenues?
 fields:
