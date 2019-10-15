@@ -1,0 +1,32 @@
+metadata:
+  title: "Collection de la liste des employeurs"
+  short title: "List: Collection"
+  documentation: "https://docassemble.org/docs/groups.html#gathering"
+  example start: 1
+  example end: 5
+---
+objects:
+  - employeur: DAList
+---
+mandatory: True
+question: |
+  Il y a ${ employeur.number_as_word() }
+  employeurs au total.
+subquestion: |
+  Les employeurs sont: ${ employeur }.
+
+
+---
+question: |
+  Y-a-t'il d'autres employeurs à ajouter à la liste?
+yesno: employeur.there_are_any
+---
+question: |
+  Nom de l'employeur à ajouter à la liste?
+fields:
+  - Classe: employeur[i]
+---
+question: |
+  Jusqu'à présent, les employeurs sont: ${ employeur }.
+  Y'a-t-il d'autres employeurs à ajouter?
+yesno: employeur.there_is_another

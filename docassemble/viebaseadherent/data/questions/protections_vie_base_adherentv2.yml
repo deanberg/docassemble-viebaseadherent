@@ -1,0 +1,69 @@
+metadata:
+  title: Set variable to list of objects
+  short title: Object
+  documentation: "https://docassemble.org/docs/fields.html#object_checkboxes"
+  example start: 2
+  example end: 4
+---
+modules:
+  - docassemble.base.legal
+---
+objects:
+  vie_base_adherent: Individual
+  vie_base_adherent.protect_ind: Individual
+  vie_base_adherent.protect_fam: Individual
+  vie_base_adherent.protect_couple: Individual
+  vie_base_adherent.protect_monoparental: Individual
+---
+mandatory: True
+code: |
+  vie_base_adherent.name.first = "vie_base_adherent"
+  vie_base_adherent.obl_fac
+  vie_base_adherent.protect_ind.name.first = "Individuel"
+  vie_base_adherent.protect_fam.name.first = "Familial"
+  vie_base_adherent.protect_couple.name.first = "Couple"
+  vie_base_adherent.protect_monoparental.name.first = "Monoparental"
+  
+---
+question: |
+  Information sur la garantie vie de base de l adhérent ?
+fields:
+  - "Protection obligatoire ou facultative" : vie_base_adherent.obl_fac
+    choices:
+    - Obligatoire: obligatoire
+    - Facultative: facultative
+    default : obligatoire
+
+  - "Exonération des primes?": vie_base_adherent.exo_prime
+    datatype: yesnoradio
+    
+  - "Delais exo": vie_base_adherent.delai
+  
+    show if: vie_base_adherent.exo_prime
+    choices:
+      - Délai longue durée
+      - 3 mois
+      - 6 mois
+
+  - "Protection d'assistance juridique": vie_base_adherent.assistance_juridique
+    datatype: yesnoradio 
+---
+question: Quels types de protections sont détenues?
+fields:
+  no label: protection
+  datatype: object_checkboxes
+  choices:
+    - vie_base_adherent.protect_ind
+    - vie_base_adherent.protect_fam
+    - vie_base_adherent.protect_couple
+    - vie_base_adherent.protect_monoparental
+---
+question: |
+  % if protection.number() == 0:
+  There are no protections here.
+  % else:
+  The ${ protection.as_noun() }
+  ${ protection.does_verb("include") }
+  ${ protection }.
+  % endif
+mandatory: True
