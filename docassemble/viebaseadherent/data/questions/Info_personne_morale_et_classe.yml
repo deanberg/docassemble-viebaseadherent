@@ -1,0 +1,54 @@
+metadata:
+  title: Gathering a list of objects
+  short title: List of objects
+  documentation: "https://docassemble.org/docs/groups.html#list of objects"
+  example start: 1
+  example end: 4
+---
+objects:
+  - personne_morale: |
+      DAList.using(
+        object_type=Organization,
+        there_are_any=True)
+        
+  - personne_morale[i].classe: |
+      DAList.using(
+        object_type=Organization, there_are_any=True)
+
+  
+---  
+code: |
+  personne_morale[i].name.text
+  personne_morale[i].classe[j].name.text
+---
+question: |
+  Quel est le nom de la ${ ordinal(i) } personne morale?
+fields:
+  - Nom de la personnne morale: personne_morale[i].name.text
+---
+question: |
+  Voulez-vous ajouter une autre personne morale?
+yesno: personne_morale.there_is_another
+
+---
+question: |
+  Quel est le nom de la ${ personne_morale[i].possessive(ordinal(j) + ' classe') }?
+fields:
+  - Nom de la classe: personne_morale[i].classe[j].name.text
+---
+question: |
+  Voulez-vous ajouter une autre classe?
+yesno: personne_morale[i].classe.there_is_another
+---
+mandatory: True
+question: |
+  Les personnes morales et les classes
+subquestion: |
+  % for p in personne_morale:
+  * ${ p }.
+    % for c in p.classe:
+    * ${p} a une classe nommée ${c}.
+    % endfor
+  % endfor
+  
+  
