@@ -36,7 +36,7 @@ fields:
 
   - "Exonération des primes?": vie_base_adherent.exo_prime
     datatype: yesnoradio
-    default: True
+    
     
   - "Delais exo": vie_base_adherent.delai
   
