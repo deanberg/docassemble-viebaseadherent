@@ -45,7 +45,7 @@ def find_package_data(where='.', package='', exclude=standard_exclude, exclude_d
 setup(name='docassemble.viebaseadherent',
       version='0.0.2',
       description=(''),
-      long_description='version de travail 2019.10.16',
+      long_description='version de travail 2019.10.23',
       long_description_content_type='text/markdown',
       author='Dean Bergeron',
       author_email='dean.bergeron@gmail.com',
