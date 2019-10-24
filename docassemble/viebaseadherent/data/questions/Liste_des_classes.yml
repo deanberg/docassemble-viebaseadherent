@@ -1,0 +1,33 @@
+metadata:
+  title: "Collection de la liste des classes"
+  short title: "List: Collection"
+  documentation: "https://docassemble.org/docs/groups.html#gathering"
+  example start: 1
+  example end: 5
+---
+objects:
+  - liste_classe: DAList
+---
+mandatory: True
+question: |
+  Section terminé
+subquestion: |
+  Voici la liste des classes ${ liste_classe }.
+
+---
+question: |
+  Compléter la liste des classes?
+yesno: liste_classe.there_are_any
+---
+question: |
+  Nom de la classe à ajouter
+fields:
+  - Nom: liste_classe[i]
+---
+question: |
+  Jusqu'à présent, les classes sont: ${ liste_classe }.
+  Y'a-t-il d'autres classes à ajouter?
+yesno: liste_classe.there_is_another
+
+---
+

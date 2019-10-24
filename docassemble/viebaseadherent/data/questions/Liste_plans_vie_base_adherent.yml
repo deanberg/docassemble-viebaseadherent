@@ -1,0 +1,66 @@
+metadata:
+  title: DAList
+  documentation: "https://docassemble.org/docs/objects.html"
+  example start: 1
+  example end: 5
+---
+objects:
+  - plans: DAList
+---
+mandatory: True
+code: |
+  plans.clear()
+  for i in range(nb_plan_vie_de_base_adherent):
+    plans.appendObject(Thing)
+ 
+  plans.gathered = True
+---
+
+question: | 
+  Combien y'a-t-il de plans "vie de base adhérents" différents?
+fields:
+  - Nombre de plans: nb_plan_vie_de_base_adherent
+    datatype: integer
+---
+mandatory: True
+question: Liste des plans vie de base adhérents
+subquestion: |
+  % for p in plans:
+  ${ p } fait partie de la liste.
+  % endfor
+---
+generic object: Thing
+question: |
+  Description du plan ${ x.object_name() }?
+fields:
+  - Nom: x.name.text
+  - "Protection obligatoire ou facultative" : x.obl_fac
+    choices:
+    - Obligatoire: obligatoire
+    - Facultative: facultative
+    default : obligatoire
+
+  - "Exonération des primes?": x.exo_prime
+    datatype: yesnoradio
+    
+    
+  - "Delais exo": x.delai
+  
+    show if: x.exo_prime
+    choices:
+      - Délai longue durée
+      - 3 mois
+      - 6 mois
+
+  - "Paiement anticipé si maladie terminale": x.maladie_terminale_paiement
+    datatype: yesnoradio
+    default: False
+
+  - "Montant": x.maladie_terminale_montant
+    show if: x.maladie_terminale_paiement
+  
+
+  - "Protection d'assistance juridique": x.assistance_juridique
+    datatype: yesnoradio
+    default: False
+     

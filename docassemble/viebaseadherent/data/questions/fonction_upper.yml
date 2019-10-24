@@ -1,0 +1,10 @@
+
+code : |
+  a='ville'
+---  
+Mandatory : True
+question : |
+  Ceci est une ${a.upper()}
+---
+  
+  

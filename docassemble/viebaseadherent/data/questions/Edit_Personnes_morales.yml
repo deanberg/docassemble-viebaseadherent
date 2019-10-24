@@ -1,0 +1,65 @@
+metadata:
+  title: Review table
+  short title: Review
+  documentation: "https://docassemble.org/docs/groups.html#editing"
+  example start: 7
+  example end: 9
+---
+objects:
+  - person_morale: DAList.using(object_type=Organization,
+                         there_are_any=True,
+                         complete_attribute='complete')
+---
+mandatory: True
+code: |
+  menu_items = [ action_menu_item('Revoir vos réponses', 'review_interview') ]
+---
+code: |
+  person_morale[i].name.text
+ 
+  person_morale[i].complete = True
+---
+question: |
+  Who is the ${ ordinal(i) } person morale?
+fields:
+  - Nom: person_morale[i].name.text
+ 
+---
+question: |
+  Are there any more personne morale
+  you would like to mention?
+yesno: person_morale.there_is_another
+---
+need: person_morale.table
+mandatory: true
+question: |
+  Merci pour vos réponses!
+subquestion: |
+  Les personnes morales sont ${ person_morale }.
+  You can
+  [Revoir vos réponses](${ url_action('review_interview') })
+  si vous le désirez.
+---
+event: review_interview
+question: |
+  Revoir vos réponses
+review:
+  - note: |
+      % if len(person_morale):
+      Les personnes morales sont:
+      ${ person_morale.table }
+      
+      ${ person_morale.add_action() }
+      % else:
+      There are no people.
+      ${ person_morale.add_action(message="Je veux ajouter une personne morale.") }
+      % endif
+---
+table: person_morale.table
+rows: person_morale
+columns:
+  - Name: |
+      row_item.name.text
+  
+edit:
+  - name.text
