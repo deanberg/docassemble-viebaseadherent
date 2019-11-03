@@ -1,0 +1,86 @@
+metadata:
+  title: Détails des plans vie de base adhérents
+  documentation: "https://docassemble.org/docs/groups.html"
+  example start: 1
+  example end: 13
+---
+objects:
+  - plans: |
+      DAList.using(
+        object_type=Individual,
+        minimum_number=1)
+
+  - plans[i].protections: |
+      DAList.using(
+        object_type=Individual,
+        minimum_number=1)
+---
+code: |
+  plans.there_are_any=True
+  plans[i].name.first
+  plans[i].protection_individuelle
+  plans[i].protection_familiale
+  plans[i].protection_couple
+  plans[i].protection_monoparentale
+
+
+---
+code: |
+  if plans[i].protection_individuelle == True:
+    plans[i].protections[0].name.first='Individuelle'
+    plans[i].protections[0].maximum_sans_preuve
+  if plans[i].protection_familiale == True:
+    plans[i].protections[1].name.first='Familiale'
+    plans[i].protections[1].maximum_sans_preuve
+  if plans[i].protection_monoparentale == True:
+    plans[i].protections[2].name.first='Monoparentale'
+    plans[i].protections[2].maximum_sans_preuve
+  if plans[i].protection_couple == True:
+    plans[i].protections[3].name.first='Couple'
+    plans[i].protections[3].maximum_sans_preuve
+
+  plans[i].protections.there_is_another=False
+
+---
+question: |
+  Un autre plan à ajouter?
+yesno: plans.there_is_another
+---
+question: |
+  Plan ${ i+1 }:
+fields:
+  - Identifiant: plans[i].name.first
+    default: Plan ${i+1}
+  - Protection individuelle: plans[i].protection_individuelle
+    datatype: yesno
+    default: True
+  - Protection familiale: plans[i].protection_familiale
+    datatype: yesno
+    default: True
+  - Protection monoparentale: plans[i].protection_monoparentale
+    datatype: yesno
+  - Protection couple: plans[i].protection_couple
+    datatype: yesno
+---
+question: |
+
+fields:
+  - Max sans preuve ${plans[i].protections[0].name.first} : plans[i].protections[0].maximum_sans_preuve
+  - Max sans preuve : plans[i].protections[1].maximum_sans_preuve
+  - Max sans preuve : plans[i].protections[2].maximum_sans_preuve
+  - Max sans preuve : plans[i].protections[3].maximum_sans_preuve
+
+---
+mandatory: True
+question: |
+  Information retrieved
+subquestion: |
+  Vous avez créé
+  ${ plans.number() } plan(s).
+
+  % for p in plans:
+  Voici un résumé de chaque plan ${ p }.
+    % for c in p.protections:
+    Protections : ${c}
+    % endfor
+  % endfor

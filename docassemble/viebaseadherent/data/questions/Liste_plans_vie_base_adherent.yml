@@ -28,6 +28,8 @@ subquestion: |
   % for p in plans:
   ${ p } fait partie de la liste.
   % endfor
+buttons:
+  - continue
 ---
 generic object: Thing
 question: |
@@ -63,4 +65,8 @@ fields:
   - "Protection d'assistance juridique": x.assistance_juridique
     datatype: yesnoradio
     default: False
+---
+mandatory:  True
+question: |
+  ${plans[0].assistance_juridique}
      
