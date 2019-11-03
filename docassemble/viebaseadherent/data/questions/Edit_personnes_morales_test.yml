@@ -1,0 +1,35 @@
+metadata:
+  title: Review table
+  short title: Review
+  documentation: "https://docassemble.org/docs/groups.html#editing"
+  example start: 7
+  example end: 9
+---
+objects:
+  - person_morale: DAList.using(object_type=Organization,
+                         there_are_any=True,
+                         complete_attribute='complete')
+---
+
+code: |
+
+  person_morale[i].name.text 
+  person_morale[i].complete = True
+---
+question: |
+  Who is the ${ ordinal(i) } person morale?
+fields:
+  - Nom: person_morale[i].name.text
+---
+question: |
+  Are there any more personne morale
+  you would like to mention?
+yesno: person_morale.there_is_another
+---
+mandatory: True
+question: |
+  Les personnes morales:
+  %for p in person_morale:
+  ${p}
+  %endfor
+

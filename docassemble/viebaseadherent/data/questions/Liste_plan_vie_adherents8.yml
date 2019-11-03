@@ -1,0 +1,116 @@
+metadata:
+  title: Détails des plans vie de base adhérents
+  documentation: "https://docassemble.org/docs/groups.html"
+  example start: 1
+  example end: 13
+---
+include:
+  - Edit_personnes_morales_test.yml
+
+---
+objects:
+  - plans: |
+      DAList.using(
+        object_type=Individual,
+        minimum_number=1)
+  
+  - plans[i].protections: |
+      DAList.using(
+        object_type=Individual,
+        minimum_number=1)
+---
+mandatory: True
+code: |
+    person_morale
+
+---
+code: |
+  plans.there_are_any=True
+  plans[i].name.first
+  plans[i].protection_individuelle
+  plans[i].protection_familiale
+
+  
+---
+code: |
+  if plans[i].protection_individuelle == True:
+    plans[i].protections[0].name.first='Individuelle'
+    plans[i].protections[0].maximum_sans_preuve
+  if plans[i].protection_familiale == True:
+    plans[i].protections[1].name.first='Familiale'
+    plans[i].protections[1].maximum_sans_preuve
+  if plans[i].protection_monoparentale == True:
+    plans[i].protections[2].name.first='Monoparentale'
+    plans[i].protections[2].maximum_sans_preuve
+  if plans[i].protection_individuelle == True:
+    plans[i].protections[3].name.first='Couple'
+    plans[i].protections[3].maximum_sans_preuve
+  
+  plans[i].protections.there_is_another=False
+---
+
+question: |
+  Un autre plan à ajouter?
+yesno: plans.there_is_another
+---
+question: |
+  Plan ${ i+1 }:
+fields:
+  - Identification du plan : plans[i].name.first
+    default: Plan_${i+1}
+  - Protection individuelle: plans[i].protection_individuelle
+    datatype: yesno
+    default: True
+  - Montant minimum d'assurance : plans[i].protections[0].montant_min
+    datatype: currency
+    default: 0
+    show if : plans[i].protection_individuelle
+  - Montant maximum sans preuve : plans[i].protections[0].maximum_sans_preuve
+    datatype: currency
+    show if : plans[i].protection_individuelle
+  - Montant maximum avec preuve : plans[i].protections[0].maximum_sans_preuve
+    datatype: currency
+    show if : plans[i].protection_individuelle
+  - Taux de prime (/ 1000$) : plans[i].protections[0].tx_prime
+    datatype: float
+    show if : plans[i].protection_individuelle
+  - Réduction de la protection : plans[i].protections[0].reduction_oui_non
+    datatype: yesno
+    default: no
+    show if : plans[i].protection_individuelle
+  - Protection familiale: plans[i].protection_familiale
+    datatype: yesno
+    default: True
+  - Max sans preuve : plans[i].protections[1].maximum_sans_preuve
+    datatype: currency
+    show if : plans[i].protection_familiale
+  - Protection monoparentale: plans[i].protection_monoparentale
+    datatype: yesno
+  - Max sans preuve : plans[i].protections[3].maximum_sans_preuve
+    datatype: currency
+    show if : plans[i].protection_monoparentale
+  - Protection couple: plans[i].protection_couple
+    datatype: yesno
+  - Max sans preuve : plans[i].protections[3].maximum_sans_preuve
+    datatype: currency
+    show if : plans[i].protection_couple
+---
+
+mandatory: True
+question: |
+  Information retrieved
+subquestion: |
+  Vous avez créé
+  ${ plans.number() } plan(s).
+  
+  % for p in plans:
+  Voici un résumé de chaque plan ${ p }. 
+    % for c in p.protections:
+    Protections : ${c}
+    % endfor
+  % endfor
+  
+  % for person in person_morale:
+  ${person_morale}
+  % endfor
+ 
